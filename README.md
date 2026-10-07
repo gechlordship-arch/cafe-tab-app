@@ -148,5 +148,5 @@ One tab: **My Meals** — with a big colored total at the top and a full table o
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/YOUR-USERNAME/cafetab.git
+   git clone https://github.com/Getnet Adamu/cafetab.git
    cd cafetab
