@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CafeTab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0b1f;
+      --bg-2: #14102b;
+      --card: #1a1633;
+      --card-2: #221d40;
+      --border: #2d2650;
+      --text: #f0edff;
+      --text-dim: #a29dc4;
+      --violet: #a259ff;
+      --pink: #ff5db1;
+      --cyan: #23d5e5;
+      --yellow: #ffc857;
+      --green: #3ecf8e;
+      --red: #ff5c7a;
+      --orange: #ff9946;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      background-image:
+        radial-gradient(circle at 20% 15%, rgba(162,89,255,0.20), transparent 45%),
+        radial-gradient(circle at 80% 20%, rgba(35,213,229,0.14), transparent 45%),
+        radial-gradient(circle at 30% 90%, rgba(255,93,177,0.15), transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(255,200,87,0.10), transparent 45%);
+      background-attachment: fixed;
+    }
+    .hide { display: none !important; }
+    button { font-family: inherit; }
+
+    /* ============ LANDING ============ */
+    .landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+    .logo {
+      font-size: 72px;
+      margin-bottom: 6px;
+      filter: drop-shadow(0 6px 24px rgba(162,89,255,0.55));
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50% { transform: translateY(-8px) rotate(3deg); }
+    }
+    .brand {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, #fff 0%, var(--violet) 40%, var(--pink) 70%, var(--yellow) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+    .tagline {
+      color: var(--text-dim);
+      font-size: 15px;
+      margin-bottom: 48px;
+      letter-spacing: 0.4px;
+    }
+    .role-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      max-width: 540px;
+    }
+    .role-btn {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 20px;
+      cursor: pointer;
+      text-align: center;
+      color: var(--text);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .role-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .role-btn.manager::before { background: linear-gradient(135deg, rgba(162,89,255,0.18), rgba(255,93,177,0.10)); }
+    .role-btn.staff::before   { background: linear-gradient(135deg, rgba(35,213,229,0.18), rgba(162,89,255,0.10)); }
+    .role-btn.customer::before{ background: linear-gradient(135deg, rgba(255,153,70,0.20), rgba(255,200,87,0.10)); }
+
+    .role-btn.manager:hover:not(:disabled) { border-color: var(--violet); box-shadow: 0 14px 34px rgba(162,89,255,0.35); transform: translateY(-4px); }
+    .role-btn.staff:hover:not(:disabled)   { border-color: var(--cyan);   box-shadow: 0 14px 34px rgba(35,213,229,0.35); transform: translateY(-4px); }
+    .role-btn.customer:hover:not(:disabled){ border-color: var(--orange); box-shadow: 0 14px 34px rgba(255,153,70,0.35); transform: translateY(-4px); }
+    .role-btn:hover:not(:disabled)::before { opacity: 1; }
+
+    .role-btn .icon { font-size: 48px; display: block; margin-bottom: 12px; position: relative; z-index: 1; }
+    .role-btn .label {
+      font-size: 18px;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.2px;
+    }
+    .role-btn .hint { font-size: 12px; color: var(--text-dim); display: block; position: relative; z-index: 1; line-height: 1.4; }
+    .role-btn:disabled { opacity: 0.32; cursor: not-allowed; background: var(--bg-2); }
+    .role-btn.full { grid-column: 1 / -1; }
+
+    /* ============ AUTH CARD ============ */
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 38px 34px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(162,89,255,0.08);
+      animation: rise 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--violet), var(--pink), var(--yellow), var(--cyan));
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card h2 {
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.6px;
+    }
+    .card .sub {
+      color: var(--text-dim);
+      font-size: 14px;
+      margin-bottom: 26px;
+      line-height: 1.5;
+    }
+    .back {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 14px;
+      margin-bottom: 20px;
+      padding: 6px 0;
+      font-weight: 600;
+      transition: color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .back:hover { color: var(--violet); }
+
+    input, select {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-2);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 15px;
+      color: var(--text);
+      font-family: inherit;
+      margin-bottom: 12px;
+      transition: all 0.2s;
+      outline: none;
+    }
+    input::placeholder { color: #6b64a0; }
+    input:focus, select:focus {
+      border-color: var(--violet);
+      background: var(--bg);
+      box-shadow: 0 0 0 4px rgba(162,89,255,0.15);
+    }
+
+    button.primary {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+      box-shadow: 0 8px 20px rgba(162,89,255,0.3);
+    }
+    button.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(162,89,255,0.5);
+      filter: brightness(1.1);
+    }
+    button.primary:active { transform: translateY(0); }
+
+    .msg {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      display: none;
+      font-weight: 600;
+      animation: rise 0.25s ease;
+    }
+    .msg.show { display: block; }
+    .msg.err { background: rgba(255,92,122,0.15); color: #ff8ca0; border: 1px solid rgba(255,92,122,0.35); }
+    .msg.good { background: rgba(62,207,142,0.15); color: #6ee0af; border: 1px solid rgba(62,207,142,0.35); }
+
+    .link-row {
+      text-align: center;
+      margin-top: 18px;
+    }
+    .link {
+      background: none;
+      border: none;
+      color: var(--violet);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .link:hover { color: var(--pink); text-decoration: underline; }
+
+    /* ============ APP ============ */
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 22px 60px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .topbar .brand-mini {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #fff, var(--violet), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .topbar .brand-mini span.emo {
+      -webkit-text-fill-color: initial;
+      font-size: 28px;
+    }
+    .who {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-dim);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: white;
+    }
+    .badge.manager { background: linear-gradient(135deg, var(--violet), var(--pink)); }
+    .badge.staff   { background: linear-gradient(135deg, var(--cyan), #1a9fb5); }
+    .badge.customer{ background: linear-gradient(135deg, var(--orange), var(--yellow)); color: #3a2000; }
+
+    .logout {
+      background: var(--card);
+      color: var(--text-dim);
+      border: 2px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    .logout:hover {
+      color: var(--red);
+      border-color: rgba(255,92,122,0.5);
+      background: rgba(255,92,122,0.08);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+      background: var(--card);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      width: fit-content;
+      max-width: 100%;
+    }
+    .tabs button {
+      padding: 11px 20px;
+      border: none;
+      background: transparent;
+      border-radius: 11px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-dim);
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+    .tabs button:hover { color: var(--text); }
+    .tabs button.active {
+      color: white;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      box-shadow: 0 4px 14px rgba(162,89,255,0.4);
+    }
+
+    .panel {
+      display: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 28px;
+      border-radius: 20px;
+      animation: rise 0.3s ease;
+    }
+    .panel.active { display: block; }
+    .panel h3 {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+    .panel h3:not(:first-child) { margin-top: 30px; }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .row input, .row select { width: auto; margin: 0; flex: 1; min-width: 140px; }
+    .row label {
+      font-size: 13px;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+    th, td {
+      text-align: left;
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding-top: 0;
+    }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:hover { background: var(--card-2); }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .total { font-weight: 800; color: var(--cyan); font-variant-numeric: tabular-nums; }
+    .total.zero { color: var(--text-dim); font-weight: 600; }
+    .total.big { color: var(--yellow); }
+
+    button.small {
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: all 0.2s;
+      margin-right: 6px;
+    }
+    .danger { background: rgba(255,92,122,0.15); color: #ff8ca0; border: 1px solid rgba(255,92,122,0.35); }
+    .danger:hover { background: rgba(255,92,122,0.3); }
+    .warn { background: rgba(255,153,70,0.15); color: #ffb073; border: 1px solid rgba(255,153,70,0.4); }
+    .warn:hover { background: rgba(255,153,70,0.3); }
+    .key-btn { background: rgba(162,89,255,0.15); color: #c39dff; border: 1px solid rgba(162,89,255,0.4); }
+    .key-btn:hover { background: rgba(162,89,255,0.3); }
+
+    .big-total {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -2.5px;
+      background: linear-gradient(135deg, var(--yellow), var(--orange), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-variant-numeric: tabular-nums;
+      margin-top: 8px;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--text-dim);
+      padding: 30px 10px;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+      -webkit-appearance: none; margin: 0;
+    }
+    input[type=number] { -moz-appearance: textfield; }
+
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg-2); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3f3577; }
+
+    @media (max-width: 640px) {
+      .brand { font-size: 40px; }
+      .logo { font-size: 56px; }
+      .role-grid { grid-template-columns: 1fr; }
+      .card { padding: 28px 22px; }
+      .app { padding: 18px 14px 40px; }
+      .panel { padding: 20px 16px; }
+      .tabs { width: 100%; }
+      .tabs button { flex: 1; text-align: center; padding: 10px 8px; font-size: 13px; }
+      .big-total { font-size: 40px; }
+      th, td { padding: 10px 8px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============ LANDING ============ -->
+<div id="landing-screen" class="landing hide">
+  <div class="logo">☕</div>
+  <div class="brand">CafeTab</div>
+  <div class="tagline">Sign now. Settle at month end.</div>
+
+  <div class="role-grid">
+    <button class="role-btn full manager" onclick="chooseRole('manager')">
+      <span class="icon">👔</span>
+      <span class="label">Manager</span>
+      <span class="hint" id="hint-manager">Full control of the cafe</span>
+    </button>
+    <button class="role-btn staff" id="btn-staff" onclick="chooseRole('staff')">
+      <span class="icon">👨‍🍳</span>
+      <span class="label">Staff</span>
+      <span class="hint" id="hint-staff">—</span>
+    </button>
+    <button class="role-btn customer" id="btn-customer" onclick="chooseRole('customer')">
+      <span class="icon">🧑</span>
+      <span class="label">Customer</span>
+      <span class="hint" id="hint-customer">—</span>
+    </button>
+  </div>
+</div>
+
+<!-- ============ SETUP ============ -->
+<div id="setup-screen" class="auth-wrap hide">
+  <div class="card">
+    <button class="back" onclick="showLanding()">← Back</button>
+    <h2>👋 Welcome</h2>
+    <p class="sub">Create the first Manager to get started. This happens only once.</p>
+    <div id="setup-msg" class="msg"></div>
+    <input id="s-name" placeholder="Your name">
+    <input id="s-phone" placeholder="Phone number">
+    <input id="s-pass" type="password" placeholder="Password">
+    <button class="primary" onclick="doSetup()">Create Manager</button>
+  </div>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div id="login-screen" class="auth-wrap hide">
+  <div class="card">
+    <button class="back" onclick="showLanding()">← Back</button>
+    <h2 id="login-title">Log In</h2>
+    <p class="sub" id="login-sub">Enter your phone and password.</p>
+    <div id="login-msg" class="msg"></div>
+    <input id="l-phone" placeholder="Phone number">
+    <input id="l-pass" type="password" placeholder="Password">
+    <button class="primary" onclick="doLogin()">Log In</button>
+    <div class="link-row">
+      <button class="link" onclick="showForgot()">Forgot password?</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ FORGOT ============ -->
+<div id="forgot-screen" class="auth-wrap hide">
+  <div class="card">
+    <button class="back" onclick="chooseRole(CHOSEN_ROLE)">← Back to login</button>
+    <h2>🔑 Password Reset</h2>
+    <p class="sub">Passwords can only be reset by the <strong>Manager</strong> from their dashboard.</p>
+
+    <div class="msg show good" style="font-size:13px; line-height:1.6">
+      <strong>How to reset your password:</strong><br><br>
+      <strong>Staff &amp; Customers:</strong> Ask the Manager to click the 🔑 button next to your name in their dashboard.<br><br>
+      <strong>Manager:</strong> If you forgot your password, you must delete the file <code>cafetab.db</code> and set up again. Contact support if you need help.
+    </div>
+
+    <button class="primary" style="margin-top:16px" onclick="chooseRole(CHOSEN_ROLE)">Back to Login</button>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app-screen" class="app hide">
+  <div class="topbar">
+    <div>
+      <div class="brand-mini"><span class="emo">☕</span> CafeTab</div>
+      <div class="who" id="who"></div>
+    </div>
+    <button class="logout" onclick="doLogout()">Log out</button>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <!-- CUSTOMERS -->
+  <div id="panel-customers" class="panel">
+    <div id="cust-add-box">
+      <h3>Add Customer</h3>
+      <div class="row">
+        <input id="c-name" placeholder="Name">
+        <input id="c-phone" placeholder="Phone">
+        <input id="c-pass" type="password" placeholder="Password">
+        <button class="primary" style="width:auto; padding:14px 24px" onclick="addCustomer()">+ Add</button>
+      </div>
+      <div id="c-msg" class="msg"></div>
+    </div>
+    <h3>Customers &amp; Balances</h3>
+    <table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Owes (ETB)</th><th id="cust-actions-head">Actions</th></tr></thead>
+      <tbody id="c-list"></tbody>
+    </table>
+  </div>
+
+  <!-- MENU -->
+  <div id="panel-menu" class="panel">
+    <h3>Add Menu Item</h3>
+    <div class="row">
+      <input id="m-name" placeholder="Item name">
+      <input id="m-price" type="number" placeholder="Price (ETB)">
+      <button class="primary" style="width:auto; padding:14px 24px" onclick="addMenu()">+ Add</button>
+    </div>
+    <div id="m-msg" class="msg"></div>
+    <h3>Menu</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Price (ETB)</th><th>Action</th></tr></thead>
+      <tbody id="m-list"></tbody>
+    </table>
+  </div>
+
+  <!-- STAFF -->
+  <div id="panel-staff" class="panel">
+    <h3>Add Staff</h3>
+    <div class="row">
+      <input id="st-name" placeholder="Name">
+      <input id="st-phone" placeholder="Phone">
+      <input id="st-pass" type="password" placeholder="Password">
+      <button class="primary" style="width:auto; padding:14px 24px" onclick="addStaff()">+ Add</button>
+    </div>
+    <div id="st-msg" class="msg"></div>
+    <h3>Staff</h3>
+    <table>
+      <thead><tr><th>Name</th><th>Phone</th><th>Action</th></tr></thead>
+      <tbody id="st-list"></tbody>
+    </table>
+  </div>
+
+  <!-- RECORD MEAL -->
+  <div id="panel-consume" class="panel">
+    <h3>Record a Meal</h3>
+    <div class="row">
+      <label>Customer</label>
+      <select id="co-customer" style="min-width:220px"></select>
+      <label>Password</label>
+      <input id="co-pass" type="password" placeholder="Customer password" style="min-width:180px; max-width:220px">
+    </div>
+    <h3 style="margin-top:26px">Items</h3>
+    <table>
+      <thead><tr><th>Item</th><th>Price</th><th style="width:120px">Qty</th></tr></thead>
+      <tbody id="co-menu"></tbody>
+    </table>
+    <div style="margin-top:20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap">
+      <button class="primary" style="width:auto; padding:14px 28px" onclick="submitConsume()">✅ Save Meal</button>
+      <span id="co-total" style="font-weight:800; color:var(--yellow); font-size:17px; font-variant-numeric: tabular-nums"></span>
+    </div>
+    <div id="co-msg" class="msg" style="margin-top:14px"></div>
+  </div>
+
+  <!-- CUSTOMER SELF-VIEW -->
+  <div id="panel-my" class="panel">
+    <h3>My Total</h3>
+    <div class="big-total" id="my-total">0.00 ETB</div>
+    <h3 style="margin-top:30px">My Meals</h3>
+    <table>
+      <thead><tr><th>Date</th><th>Item</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+      <tbody id="my-list"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let TOKEN = null, ROLE = null, NAME = null, CHOSEN_ROLE = null;
+let STATUS = { needsSetup: true, managers: 0, staff: 0, customers: 0 };
+
+function showMsg(id, text, isErr) {
+  const el = document.getElementById(id);
+  el.textContent = text;
+  el.className = 'msg show ' + (isErr ? 'err' : 'good');
+  setTimeout(() => el.classList.remove('show'), 4000);
+}
+function hideAll() {
+  ['landing-screen','setup-screen','login-screen','forgot-screen','app-screen'].forEach(id =>
+    document.getElementById(id).classList.add('hide'));
+}
+async function api(path, opts = {}) {
+  opts.headers = opts.headers || {};
+  opts.headers['Content-Type'] = 'application/json';
+  if (TOKEN) opts.headers['Authorization'] = 'Bearer ' + TOKEN;
+  const res = await fetch('/api' + path, opts);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Error');
+  return data;
+}
+
+async function refreshStatus() {
+  try { STATUS = await (await fetch('/api/setup-status')).json(); } catch(e) {}
+}
+
+async function showLanding() {
+  await refreshStatus();
+  hideAll();
+  document.getElementById('landing-screen').classList.remove('hide');
+
+  document.getElementById('hint-manager').textContent =
+    STATUS.managers === 0 ? 'Set up the first manager' : `${STATUS.managers} manager(s) registered`;
+
+  const staffBtn = document.getElementById('btn-staff');
+  const custBtn = document.getElementById('btn-customer');
+
+  if (STATUS.staff === 0) {
+    staffBtn.disabled = true;
+    document.getElementById('hint-staff').textContent = 'Manager must add staff first';
+  } else {
+    staffBtn.disabled = false;
+    document.getElementById('hint-staff').textContent = `${STATUS.staff} registered`;
+  }
+
+  if (STATUS.customers === 0) {
+    custBtn.disabled = true;
+    document.getElementById('hint-customer').textContent = 'Manager must add customers first';
+  } else {
+    custBtn.disabled = false;
+    document.getElementById('hint-customer').textContent = `${STATUS.customers} registered`;
+  }
+}
+
+async function chooseRole(role) {
+  CHOSEN_ROLE = role;
+  if (role === 'manager' && STATUS.managers === 0) {
+    hideAll();
+    document.getElementById('setup-screen').classList.remove('hide');
+    return;
+  }
+  hideAll();
+  document.getElementById('login-title').textContent =
+    'Log in as ' + role.charAt(0).toUpperCase() + role.slice(1);
+  document.getElementById('login-sub').textContent = 'Enter your phone number and password.';
+  document.getElementById('l-phone').value = '';
+  document.getElementById('l-pass').value = '';
+  document.getElementById('login-screen').classList.remove('hide');
+}
+
+function showForgot() {
+  hideAll();
+  document.getElementById('forgot-screen').classList.remove('hide');
+}
+
+async function doSetup() {
+  const name = document.getElementById('s-name').value.trim();
+  const phone = document.getElementById('s-phone').value.trim();
+  const password = document.getElementById('s-pass').value;
+  if (!name || !phone || !password) return showMsg('setup-msg', 'All fields required', true);
+  try {
+    await api('/setup', { method: 'POST', body: JSON.stringify({ name, phone, password }) });
+    showMsg('setup-msg', '✅ Manager created. Redirecting…', false);
+    await refreshStatus();
+    setTimeout(() => chooseRole('manager'), 800);
+  } catch (e) { showMsg('setup-msg', e.message, true); }
+}
+
+async function doLogin() {
+  const phone = document.getElementById('l-phone').value.trim();
+  const password = document.getElementById('l-pass').value;
+  if (!phone || !password) return showMsg('login-msg', 'Both fields required', true);
+  try {
+    const data = await api('/login', {
+      method: 'POST',
+      body: JSON.stringify({ phone, password, role: CHOSEN_ROLE })
+    });
+    TOKEN = data.token; ROLE = data.role; NAME = data.name;
+    localStorage.setItem('cafetab_token', TOKEN);
+    localStorage.setItem('cafetab_role', ROLE);
+    localStorage.setItem('cafetab_name', NAME);
+    enterApp();
+  } catch (e) { showMsg('login-msg', e.message, true); }
+}
+
+async function doLogout() {
+  try { await api('/logout', { method: 'POST' }); } catch(e){}
+  localStorage.clear();
+  TOKEN = null; ROLE = null; NAME = null;
+  await showLanding();
+}
+
+function enterApp() {
+  hideAll();
+  document.getElementById('app-screen').classList.remove('hide');
+
+  const badgeClass = 'badge ' + ROLE;
+  document.getElementById('who').innerHTML =
+    `<span class="${badgeClass}">${ROLE.toUpperCase()}</span> &nbsp; ${NAME}`;
+
+  const tabsEl = document.getElementById('tabs');
+  let tabs = [];
+
+  if (ROLE === 'manager') {
+    tabs = [['customers','👥 Customers'], ['menu','🍽️ Menu'], ['staff','👨‍🍳 Staff'], ['consume','🧾 Record Meal']];
+    document.getElementById('cust-add-box').style.display = '';
+    document.getElementById('cust-actions-head').style.display = '';
+  } else if (ROLE === 'staff') {
+    tabs = [['consume','🧾 Record Meal'], ['customers','👥 Customers']];
+    document.getElementById('cust-add-box').style.display = 'none';
+    document.getElementById('cust-actions-head').style.display = 'none';
+  } else {
+    tabs = [['my','🍽️ My Meals']];
+  }
+
+  tabsEl.innerHTML = tabs.map(([k,label],i) =>
+    `<button data-tab="${k}" class="${i===0?'active':''}">${label}</button>`).join('');
+  tabsEl.querySelectorAll('button').forEach(btn =>
+    btn.onclick = () => switchTab(btn.dataset.tab));
+
+  switchTab(tabs[0][0]);
+
+  if (ROLE === 'manager' || ROLE === 'staff') { loadCustomers(); loadMenu(); loadCustomerDropdown(); }
+  if (ROLE === 'manager') loadStaff();
+  if (ROLE === 'customer') loadMyView();
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tabs button').forEach(b =>
+    b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.panel').forEach(p =>
+    p.classList.toggle('active', p.id === 'panel-' + name));
+}
+
+async function loadCustomers() {
+  try {
+    const data = await api('/customers');
+    document.getElementById('c-list').innerHTML = data.map(c => `
+      <tr>
+        <td>${c.name}</td>
+        <td>${c.phone}</td>
+        <td class="total ${c.total > 0 ? '' : 'zero'}">${c.total.toFixed(2)} ETB</td>
+        ${ROLE === 'manager' ? `
+          <td>
+            ${c.total > 0 ? `<button class="small warn" onclick="markPaid(${c.id})">Mark Paid</button>` : ''}
+            <button class="small key-btn" onclick="resetPass('customer', ${c.id}, '${c.name.replace(/'/g,"")}')">🔑 Reset</button>
+            <button class="small danger" onclick="delCustomer(${c.id})">Delete</button>
+          </td>` : `<td></td>`}
+      </tr>`).join('') || '<tr><td colspan="4" class="empty">No customers yet</td></tr>';
+  } catch(e) {}
+}
+
+async function addCustomer() {
+  const name = document.getElementById('c-name').value.trim();
+  const phone = document.getElementById('c-phone').value.trim();
+  const password = document.getElementById('c-pass').value;
+  if (!name || !phone || !password) return showMsg('c-msg', 'All fields required', true);
+  try {
+    await api('/customers', { method: 'POST', body: JSON.stringify({ name, phone, password }) });
+    document.getElementById('c-name').value = '';
+    document.getElementById('c-phone').value = '';
+    document.getElementById('c-pass').value = '';
+    showMsg('c-msg', '✅ Customer added', false);
+    loadCustomers(); loadCustomerDropdown();
+  } catch(e) { showMsg('c-msg', e.message, true); }
+}
+
+async function delCustomer(id) {
+  if (!confirm('Delete this customer and all their meals?')) return;
+  await api('/customers/' + id, { method: 'DELETE' });
+  loadCustomers(); loadCustomerDropdown();
+}
+
+async function markPaid(id) {
+  if (!confirm("Reset this customer's balance to 0?")) return;
+  await api('/customers/' + id + '/pay', { method: 'POST' });
+  loadCustomers();
+}
+
+async function loadMenu() {
+  try {
+    const data = await api('/menu');
+    document.getElementById('m-list').innerHTML = data.map(m => `
+      <tr>
+        <td>${m.name}</td>
+        <td>${m.price.toFixed(2)} ETB</td>
+        <td>${ROLE === 'manager' ? `<button class="small danger" onclick="delMenu(${m.id})">Delete</button>` : ''}</td>
+      </tr>`).join('') || '<tr><td colspan="3" class="empty">No menu yet</td></tr>';
+
+    document.getElementById('co-menu').innerHTML = data.map(m => `
+      <tr>
+        <td>${m.name}</td>
+        <td>${m.price.toFixed(2)} ETB</td>
+        <td><input type="number" min="0" value="0" data-id="${m.id}" data-price="${m.price}"
+             onchange="updateTotal()" style="width:90px; padding:8px 10px; margin:0"></td>
+      </tr>`).join('') || '<tr><td colspan="3" class="empty">Add menu items first</td></tr>';
+  } catch(e) {}
+}
+
+async function addMenu() {
+  const name = document.getElementById('m-name').value.trim();
+  const price = parseFloat(document.getElementById('m-price').value);
+  if (!name || isNaN(price)) return showMsg('m-msg', 'Name and price required', true);
+  try {
+    await api('/menu', { method: 'POST', body: JSON.stringify({ name, price }) });
+    document.getElementById('m-name').value = '';
+    document.getElementById('m-price').value = '';
+    showMsg('m-msg', '✅ Item added', false);
+    loadMenu();
+  } catch(e) { showMsg('m-msg', e.message, true); }
+}
+
+async function delMenu(id) {
+  if (!confirm('Delete this menu item?')) return;
+  await api('/menu/' + id, { method: 'DELETE' });
+  loadMenu();
+}
+
+async function loadStaff() {
+  try {
+    const data = await api('/staff');
+    document.getElementById('st-list').innerHTML = data.map(s => `
+      <tr>
+        <td>${s.name}</td>
+        <td>${s.phone}</td>
+        <td>
+          <button class="small key-btn" onclick="resetPass('staff', ${s.id}, '${s.name.replace(/'/g,"")}')">🔑 Reset</button>
+          <button class="small danger" onclick="delStaff(${s.id})">Delete</button>
+        </td>
+      </tr>`).join('') || '<tr><td colspan="3" class="empty">No staff yet</td></tr>';
+  } catch(e) {}
+}
+
+async function addStaff() {
+  const name = document.getElementById('st-name').value.trim();
+  const phone = document.getElementById('st-phone').value.trim();
+  const password = document.getElementById('st-pass').value;
+  if (!name || !phone || !password) return showMsg('st-msg', 'All fields required', true);
+  try {
+    await api('/staff', { method: 'POST', body: JSON.stringify({ name, phone, password }) });
+    document.getElementById('st-name').value = '';
+    document.getElementById('st-phone').value = '';
+    document.getElementById('st-pass').value = '';
+    showMsg('st-msg', '✅ Staff added', false);
+    loadStaff();
+  } catch(e) { showMsg('st-msg', e.message, true); }
+}
+
+async function delStaff(id) {
+  if (!confirm('Remove this staff member?')) return;
+  await api('/staff/' + id, { method: 'DELETE' });
+  loadStaff();
+}
+
+async function resetPass(role, id, name) {
+  const np = prompt(`Enter a new password for ${name}:`);
+  if (!np) return;
+  if (np.length < 3) return alert('Password must be at least 3 characters.');
+  try {
+    await api('/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ role, id, new_password: np })
+    });
+    alert('✅ Password reset. Tell ' + name + ' their new password.');
+  } catch(e) { alert('❌ ' + e.message); }
+}
+
+async function loadCustomerDropdown() {
+  try {
+    const data = await api('/customers');
+    document.getElementById('co-customer').innerHTML =
+      '<option value="">-- Select customer --</option>' +
+      data.map(c => `<option value="${c.id}">${c.name} (${c.phone})</option>`).join('');
+  } catch(e) {}
+}
+
+function updateTotal() {
+  let total = 0;
+  document.querySelectorAll('#co-menu input').forEach(inp => {
+    const qty = parseInt(inp.value) || 0;
+    total += qty * parseFloat(inp.dataset.price);
+  });
+  document.getElementById('co-total').textContent = 'Total: ' + total.toFixed(2) + ' ETB';
+}
+
+async function submitConsume() {
+  const customer_id = parseInt(document.getElementById('co-customer').value);
+  const password = document.getElementById('co-pass').value;
+  if (!customer_id || !password) return showMsg('co-msg', 'Select customer and enter password', true);
+  const items = [];
+  document.querySelectorAll('#co-menu input').forEach(inp => {
+    const qty = parseInt(inp.value) || 0;
+    if (qty > 0) items.push({ menu_item_id: parseInt(inp.dataset.id), qty });
+  });
+  if (!items.length) return showMsg('co-msg', 'Add at least one item', true);
+  try {
+    await api('/consume', { method: 'POST', body: JSON.stringify({ customer_id, items, password }) });
+    document.querySelectorAll('#co-menu input').forEach(inp => inp.value = 0);
+    document.getElementById('co-pass').value = '';
+    updateTotal();
+    showMsg('co-msg', '✅ Meal saved successfully', false);
+    loadCustomers();
+  } catch(e) { showMsg('co-msg', '❌ ' + e.message, true); }
+}
+
+async function loadMyView() {
+  try {
+    const data = await api('/me/consumptions');
+    document.getElementById('my-total').textContent = data.total.toFixed(2) + ' ETB';
+    document.getElementById('my-list').innerHTML = data.rows.map(r => `
+      <tr>
+        <td>${new Date(r.created_at + 'Z').toLocaleString()}</td>
+        <td>${r.item_name}</td>
+        <td>${r.qty}</td>
+        <td>${r.price.toFixed(2)}</td>
+        <td class="total">${(r.qty * r.price).toFixed(2)}</td>
+      </tr>`).join('') || '<tr><td colspan="5" class="empty">No meals yet</td></tr>';
+  } catch(e) {}
+}
+
+(async () => {
+  const saved = localStorage.getItem('cafetab_token');
+  const savedRole = localStorage.getItem('cafetab_role');
+  const savedName = localStorage.getItem('cafetab_name');
+  if (saved && savedRole) {
+    TOKEN = saved; ROLE = savedRole; NAME = savedName;
+    try { await api('/me'); enterApp(); return; }
+    catch(e) { localStorage.clear(); TOKEN = null; ROLE = null; NAME = null; }
+  }
+  showLanding();
+})();
+</script>
+</body>
+</html>
